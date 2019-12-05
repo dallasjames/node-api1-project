@@ -75,6 +75,23 @@ app.delete("/api/users/:id", (req, res) => {
     })
 })
 
+app.put("/api/users/:id", (req, res) => {
+    const id = req.params.id
+    const user = req.body
+
+    db.update(id, user)
+    .then(updated => {
+        if (!updated) {
+            res.status(404).json({ error: "user not here" })
+        } else {
+            res.status(200).json({ message:  `${updated} updated` })
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ error: "come back later when its fixed" })
+    })
+})
+
 const port = 8080
 const host = "127.0.0.1"
 
