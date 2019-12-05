@@ -60,14 +60,19 @@ app.post("/api/users", (req, res) => {
 });
 
 app.delete("/api/users/:id", (req, res) => {
-    const user = db.find(row => row.id === req.params.id)
-
-    if (user) {
-        db = db.filter(row => row.id != req.params.id)
-        res.json(user)
-    } else {
-        res.status(404).json({ error: "user not found" })
-    }
+    const id = req.params.id
+    
+    db.remove(id)
+    .then(remove => {
+        if (!remove) {
+            res.status(404).json({ error: "user not here" })
+        } else {
+            res.status(200).json({ message: `${remove} was removed` })
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ error: "come back later im fixing it" })
+    })
 })
 
 const port = 8080
